@@ -1,140 +1,147 @@
 $(document).ready(function() {
 
-   let array = ["cats", "tv", "space", "trump", "sports", "news"];
+  let array = ["cats", "tv", "space", "trump", "sports", "news", "humor"];
 
-   function renderButtons() {
+  function renderButtons() {
 
-    // Deleting the movie buttons prior to adding new movie buttons
-    // (this is necessary otherwise we will have repeat buttons)
-    $("#buttons").empty();
+   // Deleting the movie buttons prior to adding new movie buttons
+   // (this is necessary otherwise we will have repeat buttons)
+   $("#buttons").empty();
 
-    // loop to create new buttons and populate button div
-    for (let i = 0; i < array.length; i++) {
-      let btnDiv = $("<div class='text-left'>");
-      btnDiv.attr("id", "item-" + i);
-      btnDiv.addClass("button-style");
-
-      let closeBtn = $("<div>");
-      closeBtn.attr("data-close", i);
-      closeBtn.addClass("btn btn-primary");
-      closeBtn.addClass("checkbox");
-      closeBtn.text("x");
-      closeBtn.css("margin-top", "0px")
-
-      let gifBtn = $("<div>");
-      gifBtn.addClass("gif-button btn btn-primary");
-      gifBtn.attr("data-gif", array[i]);
-      gifBtn.attr("type", "button");
-      gifBtn.text(array[i]);
-
-      $(btnDiv).append(closeBtn);
-      $(btnDiv).append(gifBtn);
-
-      $("#buttons").append(btnDiv);
-    }
-  }
-
-  // when user clicks a gif button
-  $("#buttons").on("click",".gif-button", function() {
-        let topic = $(this).attr("data-gif");
-        console.log(topic);
-        let rating = Math.floor(Math.random() * 3);
-        console.log(rating);
-        if (rating === 0) {
-          rating = "G";
-          console.log("line 32 " + rating);
-        }
-        else if (rating === 1) {
-          rating = "PG";
-          console.log("line 32 " + rating);
-        }
-        else {
-          rating = "PG-13";
-          console.log("line 36 " + rating);
-        }
-
-        // setting giphy api
-        let queryURL = "https://api.giphy.com/v1/gifs/random?api_key=XA9pNrEDRab3yb99QwuNVa8gWktN97yn&tag=" + topic + "&rating=" + rating;
-        console.log(queryURL);
-
-        $.ajax({
-          url: queryURL,
-          method: "GET"
-        })
-  
-          .then(function(response) {
-
-            // creating variables from api response
-            let gifUrl = response.data.image_original_url;
-            let stillUrl = response.data.images.original_still.url;
-            // creating a div to stick the image and rating text in
-            let gifDiv = $("<div class='imageBox'>");
-            let p = $("<p>").text("Rated " + rating);
-  
-            // creating images and adding attributes
-            let gifImage = $("<img>");
-  
-            $(gifImage).attr("src", gifUrl);
-            $(gifImage).attr("data-still", stillUrl);
-            $(gifImage).attr("data-animate", gifUrl);
-            $(gifImage).attr("data-state", "animate");
-            $(gifImage).css({"height": "300px"});
-            $(gifImage).addClass("gif");
-            $(gifImage).addClass("rounded mx-auto d-block");
-            $(gifDiv).append(gifImage);
-            $(gifDiv).append(p);
-            $(gifDiv).css({"display": "inline-block"})
-
-            // putting the gif and rating on the page with animation
-            $(gifDiv).hide().prependTo("#images").slideDown(750);
-
-          });
-
-      });
-
-      // when user clicks on a gif
-      $("#images").on("click",".gif", function() {
-      // setting the state to the state of the gif clicked
-      let state = $(this).attr("data-state");
-      // checking condition of state
-      if (state === "still") {
-        $(this).attr("src", $(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
-      } else {
-        $(this).attr("src", $(this).attr("data-still"));
-        $(this).attr("data-state", "still");
-      }
+   // loop to create new buttons and populate button div
+   for (let i = 0; i < array.length; i++) {
+     let btnDiv = $("<div class='text-left'>");
+     btnDiv.attr("id", "item-" + i);
+     btnDiv.addClass("button-style");
+     btnDiv.css({
+      "margin-top": "0px",
+      "outline": "0",
     });
 
-    // removes row
-    $(document.body).on("click", ".checkbox", function() {
-      let removeBtn = $(this).attr("data-close");
-      console.log(removeBtn);
-      console.log(array);
-      debugger;
-      $("#item-" + removeBtn).remove();
-      array = array.splice(removeBtn, 1);
-      console.log(array);
-      renderButtons();
-    });
+     let closeBtn = $("<button>");
+     closeBtn.attr("data-close", i);
+    //  closeBtn.addClass("btn btn-primary");
+     closeBtn.addClass("checkbox");
+     closeBtn.text("x");
+     closeBtn.css({
+       "margin-top": "0px",
+       "outline": "0",
+     });
 
-    // when user adds a new topic button
-    $("#add-gif").on("click", function(event) {
-      // event.preventDefault() prevents the form from trying to submit itself.
-      // We're using a form so that the user can hit enter instead of clicking the button if they want
-      event.preventDefault();
+     let gifBtn = $("<button>");
+     gifBtn.addClass("gif-button");
+     gifBtn.attr("data-gif", array[i]);
+     gifBtn.attr("type", "button");
+     gifBtn.text(array[i]);
 
-      // This line will grab the text from the input box
-       let gifText = $("#gif-input").val().trim();
-      // The movie from the textbox is then added to our array
-      array.push(gifText);
+     $(btnDiv).append(closeBtn);
+     $(btnDiv).append(gifBtn);
 
-      // calling renderButtons which handles the processing of our movie array
-      renderButtons();
-    });
+     $("#buttons").append(btnDiv);
+   }
+ }
 
-    // Calling the renderButtons function at least once to display the initial list of movies
-    renderButtons();
+ // when user clicks a gif button
+ $("#buttons").on("click",".gif-button", function() {
+       let topic = $(this).attr("data-gif");
+       console.log(topic);
+       let rating = Math.floor(Math.random() * 3);
+       console.log(rating);
+       if (rating === 0) {
+         rating = "G";
+         console.log("line 32 " + rating);
+       }
+       else if (rating === 1) {
+         rating = "PG";
+         console.log("line 32 " + rating);
+       }
+       else {
+         rating = "PG-13";
+         console.log("line 36 " + rating);
+       }
+
+       // setting giphy api
+       let queryURL = "https://api.giphy.com/v1/gifs/random?api_key=XA9pNrEDRab3yb99QwuNVa8gWktN97yn&tag=" + topic + "&rating=" + rating;
+       console.log(queryURL);
+
+       $.ajax({
+         url: queryURL,
+         method: "GET"
+       })
+ 
+         .then(function(response) {
+
+           // creating variables from api response
+           let gifUrl = response.data.image_original_url;
+           let stillUrl = response.data.images.original_still.url;
+           // creating a div to stick the image and rating text in
+           let gifDiv = $("<div class='imageBox'>");
+           let p = $("<p>").text("Rated " + rating);
+ 
+           // creating images and adding attributes
+           let gifImage = $("<img>");
+ 
+           $(gifImage).attr("src", gifUrl);
+           $(gifImage).attr("data-still", stillUrl);
+           $(gifImage).attr("data-animate", gifUrl);
+           $(gifImage).attr("data-state", "animate");
+           $(gifImage).css({"height": "300px"});
+           $(gifImage).addClass("gif");
+           $(gifImage).addClass("rounded mx-auto d-block");
+           $(gifDiv).append(gifImage);
+           $(gifDiv).append(p);
+           $(gifDiv).css({"display": "inline-block"})
+
+           // putting the gif and rating on the page with animation
+           $(gifDiv).hide().prependTo("#images").slideDown(750);
+
+         });
+
+     });
+
+     // when user clicks on a gif
+     $("#images").on("click",".gif", function() {
+     // setting the state to the state of the gif clicked
+     let state = $(this).attr("data-state");
+     // checking condition of state
+     if (state === "still") {
+       $(this).attr("src", $(this).attr("data-animate"));
+       $(this).attr("data-state", "animate");
+     } else {
+       $(this).attr("src", $(this).attr("data-still"));
+       $(this).attr("data-state", "still");
+     }
+   });
+
+   // removes row
+   $(document.body).on("click", ".checkbox", function() {
+     let removeBtn = $(this).attr("data-close");
+     console.log(removeBtn);
+     console.log(array);
+     $("#item-" + removeBtn).remove();
+     array.splice(removeBtn, 1);
+     console.log(array);
+     renderButtons();
+   });
+
+   // when user adds a new topic button
+   $("#add-gif").on("click", function(event) {
+     
+     // event.preventDefault() prevents the form from trying to submit itself.
+     // We're using a form so that the user can hit enter instead of clicking the button if they want
+     event.preventDefault();
+
+     // This line will grab the text from the input box
+      let gifText = $("#gif-input").val().trim();
+     // The movie from the textbox is then added to our array
+     array.push(gifText);
+
+     // calling renderButtons which handles the processing of our movie array
+     renderButtons();
+   });
+
+   // Calling the renderButtons function at least once to display the initial list of movies
+   renderButtons();
 
 
 
