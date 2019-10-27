@@ -4,8 +4,7 @@ $(document).ready(function() {
 
   function renderButtons() {
 
-   // Deleting the movie buttons prior to adding new movie buttons
-   // (this is necessary otherwise we will have repeat buttons)
+   // Deleting the buttons prior to adding new ones
    $("#buttons").empty();
 
    // loop to create new buttons and populate button div
@@ -20,7 +19,6 @@ $(document).ready(function() {
 
      let closeBtn = $("<button>");
      closeBtn.attr("data-close", i);
-    //  closeBtn.addClass("btn btn-primary");
      closeBtn.addClass("checkbox");
      closeBtn.text("x");
      closeBtn.css({
@@ -80,7 +78,8 @@ $(document).ready(function() {
  
            // creating images and adding attributes
            let gifImage = $("<img>");
- 
+          
+           // creating the image attributes
            $(gifImage).attr("src", gifUrl);
            $(gifImage).attr("data-still", stillUrl);
            $(gifImage).attr("data-animate", gifUrl);
@@ -126,29 +125,13 @@ $(document).ready(function() {
 
    // when user adds a new topic button
    $("#add-gif").on("click", function(event) {
-     
-     // event.preventDefault() prevents the form from trying to submit itself.
-     // We're using a form so that the user can hit enter instead of clicking the button if they want
-     event.preventDefault();
-
-     // This line will grab the text from the input box
-      let gifText = $("#gif-input").val().trim();
-     // The movie from the textbox is then added to our array
-     array.push(gifText);
-
-     // calling renderButtons which handles the processing of our movie array
+    event.preventDefault();
+    let gifText = $("#gif-input").val().trim();
+    array.push(gifText);
      renderButtons();
    });
 
-   // Calling the renderButtons function at least once to display the initial list of movies
+   // displaying the initial list of buttons
    renderButtons();
-
-
-
-
-
-
-
-
 
 });
